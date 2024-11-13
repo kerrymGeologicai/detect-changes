@@ -2,7 +2,7 @@
 
 const core = require('@actions/core')
 const github = require('@actions/github')
-const octokit = github.getOctokit(process.env.GITHUB_TOKEN);
+const octokit = github.getOctokit();
 
 const main = async () => {
   const event = JSON.parse(core.getInput('github_event'))
@@ -14,7 +14,10 @@ const main = async () => {
             basehead: `${event.before}...${event.after}`
         });
         return response.data.files.map(file => file.filename);
-  } else if (event.pull_request) {    // pull_request event
+  } else if (event.pull_request && 
+            (event.action === 'opened' ||
+             event.action === 'synchronize' ||
+             event.action === 'reopened')) {
         response = await octokit.rest.pulls.listFiles({
             owner: github.context.repo.owner,
             repo: github.context.repo.repo,
