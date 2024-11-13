@@ -1,11 +1,13 @@
 {
-  "name": "ci-workflows",
+  "name": "detect-changes",
   "version": "1.0.0",
-  "description": "reusable github workflows",
+  "description": "a reusable github workflow to detect and list changes on push and PR events",
   "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+  "dependencies": {
+    "@actions/core": "^1.10.0",
+    "@actions/github": "^6.0.0"
   },
-  "author": "",
-  "license": "ISC"
+  "devDependencies": {
+    "@vercel/ncc": "^0.38.1"
+  }
 }
