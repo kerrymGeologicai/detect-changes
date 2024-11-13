@@ -1,0 +1,40 @@
+name: 'Detect Changes'
+author: kerrymGrologicai
+description: 'Reusable workflow for identifying changed files in a GitHub event'
+on:
+  workflow_call:
+    inputs:
+      github_event:
+        description: 'The stringified GitHub event object'
+        required: true
+        type: string
+    outputs:
+      changed_files:
+        description: 'A newline-separated string of files which were changed'
+        value: ${{ jobs.detect-changes.outputs.files }}
+      has_changes:
+        description: 'Boolean indicating if any files changed'
+        value: ${{ jobs.detect-changes.outputs.has_changes }}
+
+runs:
+  using: 'node16'
+  main: 'index.js'
+
+jobs:
+  detect-changes:
+    runs-on: ubuntu-latest
+    outputs:
+      files: ${{ steps.get-changes.outputs.files }}
+      has_changes: ${{ steps.get-changes.outputs.has_changes }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 100
+
+      - name: Get changed files
+        id: get-changes
+        env:
+          EVENT_JSON: ${{ inputs.github_event }}
+        run: |
