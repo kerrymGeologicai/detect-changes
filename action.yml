@@ -1,5 +1,5 @@
 name: 'Detect Changes'
-author: kerrymGrologicai
+author: kerrymGeologicai
 description: 'Reusable workflow for identifying changed files in a GitHub event'
 on:
   workflow_call:
@@ -15,6 +15,7 @@ on:
       has_changes:
         description: 'Boolean indicating if any files changed'
         value: ${{ jobs.detect-changes.outputs.has_changes }}
+    
 
 runs:
   using: 'node16'
