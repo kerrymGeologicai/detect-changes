@@ -7,7 +7,7 @@ const main = async () => {
   const octokit = github.getOctokit(core.getInput('github_token'));
 
   const event = JSON.parse(core.getInput('github_event'));
-  let changedFiles;
+  let changedFiles = [];
   if (event.before && event.after) {    // push event
         const response = await octokit.rest.repos.compareCommits({
             owner: github.context.repo.owner,
@@ -16,7 +16,6 @@ const main = async () => {
             head: event.after
         });
         changedFiles = response.data.files.map(file => file.filename);
-        return response.data.files.map(file => file.filename);
   } else if (event.pull_request && // PR
             (event.action === 'opened' ||
              event.action === 'synchronize' ||
@@ -32,4 +31,7 @@ const main = async () => {
   return null;
 }
 
-main().catch(err => core.setFailed(err.message))
+if (require.main === module) {
+    main().catch(err => core.setFailed(err.message));
+  }
+module.exports = { main };
