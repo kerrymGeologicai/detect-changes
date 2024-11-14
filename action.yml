@@ -7,6 +7,10 @@ inputs:
     description: 'The stringified GitHub event object'
     required: true
     type: string
+  github_token:
+    description: 'GitHub Token'
+    required: false
+    default: ${{ github.token }}
 outputs:
   changed_files:
     description: 'A newline-separated string of files which were changed'

@@ -31824,8 +31824,9 @@ const main = async () => {
   if (!token) {
     throw new Error('GITHUB_TOKEN not found in environment');
   }  
-  const octokit = github.getOctokit(token);
+  const octokit = github.getOctokit(core.getInput(github_token));
 
+  const event = JSON.parse(core.getInput('github_event'));
   if (event.before && event.after) {    // push event
         response = await octokit.rest.repos.compareCommitsWithBaseHead({
             owner: github.context.repo.owner,
