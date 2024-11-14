@@ -1,6 +1,50 @@
 /******/ (() => { // webpackBootstrap
 /******/ 	var __webpack_modules__ = ({
 
+/***/ 6136:
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
+
+"use strict";
+
+
+const core = __nccwpck_require__(7484)
+const github = __nccwpck_require__(3228)
+
+const main = async () => {
+  const octokit = github.getOctokit(core.getInput('github_token'));
+
+  const event = JSON.parse(core.getInput('github_event'));
+  let changedFiles = [];
+  if (event.before && event.after) {    // push event
+        const response = await octokit.rest.repos.compareCommits({
+            owner: github.context.repo.owner,
+            repo: github.context.repo.repo,
+            base: event.before,
+            head: event.after
+        });
+        changedFiles = response.data.files.map(file => file.filename);
+  } else if (event.pull_request && // PR
+            (event.action === 'opened' ||
+             event.action === 'synchronize' ||
+             event.action === 'reopened')) {
+        const response = await octokit.rest.pulls.listFiles({
+            owner: github.context.repo.owner,
+            repo: github.context.repo.repo,
+            pull_number: event.pull_request.number
+        });
+        changedFiles = response.data.map(file => file.filename);
+  }
+  core.setOutput('changed_files', changedFiles.join('\n'));
+  return null;
+}
+
+if (require.main === require.cache[eval('__filename')]) {
+    main().catch(err => core.setFailed(err.message));
+  }
+module.exports = { main };
+
+/***/ }),
+
 /***/ 4914:
 /***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
 
@@ -31810,47 +31854,12 @@ module.exports = parseParams
 /******/ 	if (typeof __nccwpck_require__ !== 'undefined') __nccwpck_require__.ab = __dirname + "/";
 /******/ 	
 /************************************************************************/
-var __webpack_exports__ = {};
-// This entry need to be wrapped in an IIFE because it need to be in strict mode.
-(() => {
-"use strict";
-
-
-const core = __nccwpck_require__(7484)
-const github = __nccwpck_require__(3228)
-
-const main = async () => {
-  const octokit = github.getOctokit(core.getInput('github_token'));
-
-  const event = JSON.parse(core.getInput('github_event'));
-  let changedFiles;
-  if (event.before && event.after) {    // push event
-        const response = await octokit.rest.repos.compareCommits({
-            owner: github.context.repo.owner,
-            repo: github.context.repo.repo,
-            base: event.before,
-            head: event.after
-        });
-        changedFiles = response.data.files.map(file => file.filename);
-        return response.data.files.map(file => file.filename);
-  } else if (event.pull_request && // PR
-            (event.action === 'opened' ||
-             event.action === 'synchronize' ||
-             event.action === 'reopened')) {
-        const response = await octokit.rest.pulls.listFiles({
-            owner: github.context.repo.owner,
-            repo: github.context.repo.repo,
-            pull_number: event.pull_request.number
-        });
-        changedFiles = response.data.map(file => file.filename);
-  }
-  core.setOutput('changed_files', changedFiles.join('\n'));
-  return null;
-}
-
-main().catch(err => core.setFailed(err.message))
-})();
-
-module.exports = __webpack_exports__;
+/******/ 	
+/******/ 	// startup
+/******/ 	// Load entry module and return exports
+/******/ 	// This entry module is referenced by other modules so it can't be inlined
+/******/ 	var __webpack_exports__ = __nccwpck_require__(6136);
+/******/ 	module.exports = __webpack_exports__;
+/******/ 	
 /******/ })()
 ;
