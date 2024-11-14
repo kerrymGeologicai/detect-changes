@@ -31818,10 +31818,13 @@ var __webpack_exports__ = {};
 
 const core = __nccwpck_require__(7484)
 const github = __nccwpck_require__(3228)
-const octokit = github.getOctokit();
 
 const main = async () => {
-  const event = JSON.parse(core.getInput('github_event'))
+  const token = process.env.GITHUB_TOKEN;
+  if (!token) {
+    throw new Error('GITHUB_TOKEN not found in environment');
+  }  
+  const octokit = github.getOctokit(token);
 
   if (event.before && event.after) {    // push event
         response = await octokit.rest.repos.compareCommitsWithBaseHead({
