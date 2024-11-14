@@ -4,10 +4,6 @@ const core = require('@actions/core')
 const github = require('@actions/github')
 
 const main = async () => {
-  const token = process.env.GITHUB_TOKEN;
-  if (!token) {
-    throw new Error('GITHUB_TOKEN not found in environment');
-  }  
   const octokit = github.getOctokit(core.getInput(github_token));
 
   const event = JSON.parse(core.getInput('github_event'));
