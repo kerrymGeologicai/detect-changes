@@ -1,6 +1,6 @@
 {
   "name": "detect-changes",
-  "version": "1.0.0",
+  "version": "0.0.1",
   "description": "a reusable github workflow to detect and list changes on push and PR events",
   "main": "index.js",
   "dependencies": {
