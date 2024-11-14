@@ -2,10 +2,13 @@
 
 const core = require('@actions/core')
 const github = require('@actions/github')
-const octokit = github.getOctokit();
 
 const main = async () => {
-  const event = JSON.parse(core.getInput('github_event'))
+  const token = process.env.GITHUB_TOKEN;
+  if (!token) {
+    throw new Error('GITHUB_TOKEN not found in environment');
+  }  
+  const octokit = github.getOctokit(token);
 
   if (event.before && event.after) {    // push event
         response = await octokit.rest.repos.compareCommitsWithBaseHead({
