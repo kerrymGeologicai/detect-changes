@@ -8,10 +8,11 @@ const main = async () => {
 
   const event = JSON.parse(core.getInput('github_event'));
   if (event.before && event.after) {    // push event
-        response = await octokit.rest.repos.compareCommitsWithBaseHead({
+        response = await octokit.rest.repos.compareCommits({
             owner: github.context.repo.owner,
             repo: github.context.repo.repo,
-            basehead: `${event.before}...${event.after}`
+            base: event.before,
+            head: event.after
         });
         return response.data.files.map(file => file.filename);
   } else if (event.pull_request && // PR
