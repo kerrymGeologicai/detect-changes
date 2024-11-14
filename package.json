@@ -1,8 +1,11 @@
 {
   "name": "detect-changes",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "a reusable github workflow to detect and list changes on push and PR events",
   "main": "index.js",
+  "scripts": {
+    "build": "ncc build index.js -o dist"
+  },
   "dependencies": {
     "@actions/core": "^1.10.0",
     "@actions/github": "^6.0.0"

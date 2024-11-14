@@ -10,6 +10,7 @@ const main = async () => {
   }  
   const octokit = github.getOctokit(token);
 
+  const event = JSON.parse(core.getInput('github_event'));
   if (event.before && event.after) {    // push event
         response = await octokit.rest.repos.compareCommitsWithBaseHead({
             owner: github.context.repo.owner,
