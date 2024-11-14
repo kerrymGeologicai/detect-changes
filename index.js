@@ -4,7 +4,7 @@ const core = require('@actions/core')
 const github = require('@actions/github')
 
 const main = async () => {
-  const octokit = github.getOctokit(core.getInput(github_token));
+  const octokit = github.getOctokit(core.getInput('github_token'));
 
   const event = JSON.parse(core.getInput('github_event'));
   if (event.before && event.after) {    // push event
@@ -14,7 +14,7 @@ const main = async () => {
             basehead: `${event.before}...${event.after}`
         });
         return response.data.files.map(file => file.filename);
-  } else if (event.pull_request && 
+  } else if (event.pull_request && // PR
             (event.action === 'opened' ||
              event.action === 'synchronize' ||
              event.action === 'reopened')) {
