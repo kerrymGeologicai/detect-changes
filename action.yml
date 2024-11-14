@@ -14,9 +14,6 @@ inputs:
 outputs:
   changed_files:
     description: 'A newline-separated string of files which were changed'
-  has_changes:
-    description: 'Boolean indicating if any files changed'
-    
 
 runs:
   using: 'node16'
